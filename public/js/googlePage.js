@@ -11,15 +11,18 @@
    // $(".quote").append("HIHIHIHIHI");
 
    injectHyperlink();
+   identifyMessage();
 
    function injectHyperlink() {
      // var textElement  = $(".quote").html();
-     $('.quote').html(function(idx, html){
-         return html.replace(/sentiment/g, '<a href="http://www.google.com">sentiment</a>')
-     })
+     $('.quote h1').html(function(idx, html){
+         return html.replace(identifyMessage(),'<a href="http://www.google.com">'+ identifyMessage() +'</a>');
+     });
    };
 
    function identifyMessage() {
-
+      var textElement = $(".quote h1").html();
+      // var array = textElement.split(" ")
+      return textElement;
    };
  });
