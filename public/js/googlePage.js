@@ -8,18 +8,36 @@
 
  $(document).ready(function() {
 
-   // $(".quote").append("HIHIHIHIHI");
 
-   injectHyperlink();
 
-   function injectHyperlink() {
+   // injectHyperlink();
+   identifyMessage();
+   // testing();
+
+   // function testing() {
+   //    console.log("Hello");
+   // };
+
+   function injectHyperlink(message) {
      // var textElement  = $(".quote").html();
-     $('.quote').html(function(idx, html){
-         return html.replace(/sentiment/g, '<a href="http://www.google.com">sentiment</a>')
-     })
+     $('span.st').html(function(idx, html){
+         return html.replace(message,'<a href="http://www.google.com">'+ message +'</a>');
+     });
    };
 
    function identifyMessage() {
+      // var textElement = $("span.st").html();
+      var arraySpan = document.getElementsByClassName("st");
 
+      for (var i = 0; i < arraySpan.length; i++) {
+          injectHyperlink(arraySpan[i].innerHTML);
+      };
+      // var array = textElement.split(" ")
    };
+
+   // function filterResultInserts(event) {
+   //   console.log(event);
+   // }
+
+   // target.addEventListener('DOMNodeInserted', filterResultInserts);
  });
