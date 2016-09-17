@@ -1,5 +1,5 @@
 {
-  "manifest_version": 1,
+  "manifest_version": 2,
 
   "name": "SearchDirect",
   "description": "This extension shows allows for direct access to page content from google search",
@@ -7,18 +7,25 @@
 
   "browser_action": {
     "default_icon": "icon.png",
-    "default_popup": "popup.html"
+    "default_popup": "public/popup.html"
   },
   "permissions": [
     "activeTab",
+    "tabs",
+    "bookmarks",
     "https://ajax.googleapis.com/",
-    "http://www.google.com/*"
+    "http://www.google.com/*",
+    "http://mapifyapp.herokuapp.com/*"
+
   ],
   "content_scripts": [
     {
-      "matches": ["http://www.google.com/*"],
-      "css": ["mystyles.css"],
-      "js": ["jquery.js", "googlePage.js"]
+      "matches": ["https://mapifyapp.herokuapp.com/*", "http://www.google.com/*"],
+      "css": ["public/stylesheets/custom.css"],
+      "js": ["public/lib/jquery-3.1.0.min.js", "public/js/contentScript.js", "public/js/googlePage.js"]
     }
-  ]
+  ],
+  "background": {
+    "scripts": ["public/js/googlePage.js"]
+  }
 }
