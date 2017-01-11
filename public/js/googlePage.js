@@ -72,7 +72,7 @@ window.addEventListener("message", function(event) {
 	   // add href links
 	   for (var i = 0; i < contentFragments.length; i++) {
 		   console.log(contentFragments[i]);
-		   newContent += "<a onmousedown=\"(function() {alert(this.innerText);}) (event)\" href=\"" + link + "\">" + contentFragments[i] + "</a>";
+		   newContent += "<a onmousedown=\"(function(e, obj) {alert(obj.innerText);}) (event, this)\" href=\"" + link + "\">" + contentFragments[i] + "</a>";
 		   if (i != (contentFragments.length - 1)) {
 			   newContent += "...";
 		   }
