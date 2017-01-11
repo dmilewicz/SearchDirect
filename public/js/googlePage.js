@@ -26,23 +26,30 @@ window.addEventListener("message", function(event) {
  $(document).ready(function() {
 	 	 
 	 if (window.location.hostname == "www.google.com" ) {
+		 // call the function to inject hyperlinks
 		 identifyMessage();
+		 
+		 newSearch = document.getElementById("tsf");
+		 console.log("adding event listener...");
+		 newSearch.onsubmit = function () {alert("tried again")};
+		 newSearch.addEventListener("submit", saveText, false);
+		 console.log("done");
+		 
 	 }
  });
 
  
  	
-   function identifyMessage() {
-	      var arraySpan = document.getElementsByClassName("g");
+function identifyMessage() {
+	var arraySpan = document.getElementsByClassName("g");
 	      
-	      for (var i = 0; i < 10; i++) {
-	          injectHyperlink(arraySpan[i]);
+		for (var i = 0; i < 10; i++) {
+			injectHyperlink(arraySpan[i]);
 	  };
    };
    
    
    function injectHyperlink(message) {
-	   console.log("running hyperlink injection");
 	   
 	   // get link to next page 
 	   var link = message.getElementsByClassName("r")[0].getElementsByTagName("a")[0].href;
@@ -71,8 +78,7 @@ window.addEventListener("message", function(event) {
 	   
 	   // add href links
 	   for (var i = 0; i < contentFragments.length; i++) {
-		   console.log(contentFragments[i]);
-		   newContent += "<a onmousedown=\"(function(e, obj) {alert(obj.innerText);}) (event, this)\" href=\"" + link + "\">" + contentFragments[i] + "</a>";
+		   newContent += "<a onmousedown=\"(function(e, obj) {console.log(obj.innerText);}) (event, this)\" style=\"color: inherit; text-decoration: none;\" href=\"" + link + "\">" + contentFragments[i] + "</a>";
 		   if (i != (contentFragments.length - 1)) {
 			   newContent += "...";
 		   }
@@ -90,10 +96,4 @@ window.addEventListener("message", function(event) {
    }
    
    
-
-   // function filterResultInserts(event) {
-   //   console.log(event);
-   // }
-
-   // target.addEventListener('DOMNodeInserted', filterResultInserts);
  
