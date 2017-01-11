@@ -10,22 +10,15 @@
     "default_popup": "public/popup.html"
   },
   "permissions": [
-    "activeTab",
-    "tabs",
-    "bookmarks",
-    "https://ajax.googleapis.com/",
-    "https://*.google.com/*",
-    "http://mapifyapp.herokuapp.com/*"
+    "activeTab"
   ],
   "content_security_policy": "script-src 'self' https://www.google.com; object-src 'self'",
   "content_scripts": [
     {
-      "matches": ["https://mapifyapp.herokuapp.com/*", "https://www.google.com/*"],
+      "run_at": "document_end",
+      "matches": ["http://*/*", "https://*/*" ],
       "css": ["public/stylesheets/custom.css"],
       "js": ["public/lib/jquery-3.1.0.min.js", "public/js/contentScript.js", "public/js/googlePage.js"]
     }
-  ],
-  "background": {
-    "scripts": ["public/js/googlePage.js"]
-  }
+  ]
 }
