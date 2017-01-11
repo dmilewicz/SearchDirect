@@ -6,7 +6,25 @@
  */
 
 
+var port = chrome.runtime.connect();
+
+window.addEventListener("message", function(event) {
+  // We only accept messages from ourselves
+  if (event.source != window)
+    return;
+
+  if (event.data.type && (event.data.type == "FROM_PAGE")) {
+    console.log("Content script received: " + event.data.text);
+    alert("form resubmitted");
+  }
+}, false);
+
+
+
+
+
  $(document).ready(function() {
+	 	 
 	 if (window.location.hostname == "www.google.com" ) {
 		 identifyMessage();
 	 }
@@ -40,21 +58,24 @@
 	   
 	   // if present add the date to the new HTML string
 	   if (fContent !== undefined) {
-//		   alert(fContent);
 		   newContent += fContent.outerHTML;
 		   stContent.removeChild(fContent);
-//		   fText = stText.replace(fContent, '');
 	   } 
 	   
+	   // get relevant text from the webpage
 	   var stText = stContent.innerHTML;
 	    
 	    
 	   // split by elipsis
 	   var contentFragments = stText.split("...");
 	   
+	   // add href links
 	   for (var i = 0; i < contentFragments.length; i++) {
 		   console.log(contentFragments[i]);
-		   newContent += "<a href=\"" + link + "\">" + contentFragments[i] + "</a>";
+		   newContent += "<a onmousedown=\"(function() {alert(this.innerText);}) (event)\" href=\"" + link + "\">" + contentFragments[i] + "</a>";
+		   if (i != (contentFragments.length - 1)) {
+			   newContent += "...";
+		   }
 	   }
 	   
 	   
@@ -65,7 +86,7 @@
    
    
    function saveText() {
-	   
+	   alert("hello");
    }
    
    

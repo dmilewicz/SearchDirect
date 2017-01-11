@@ -1,3 +1,3 @@
-SearchDirect 
+#SearchDirect 
 
-A google chrome extension to access desired text content 
+A google chrome extension that allows direct access to the text content of a google search.
