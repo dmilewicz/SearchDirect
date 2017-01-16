@@ -3,15 +3,37 @@
  * string will be saved on this page. Upon the next page load, if there is a string in the event page it will be passed to the next page an search for the string will commence. 
  */
 
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+	  
+	  
+	  
 
-$(document).ready(function() {
-	var searchString = chrome.storage.local.get("searchString");
-	chrome.storage.local.remove("searchString");
-	if (searchString != undefined) {
-		chrome.storage.local.remove("searchString");
-		console.log("String found: " + searchString);
-		alert(searchString);
-	}
-	
-	
-});
+//	  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});	
+
+	  
+	  
+	  setTimeout( function() {
+
+		  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});	
+	  }, 5000);
+	  
+	  
+	  
+	  
+//	  chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+//		  
+//		  alert("hello!");
+//		  alert(tabId);
+//		  
+//		  
+//		  if (info.status == "complete") {
+//			  chrome.tabs.sendMessage(tab.id, {searchString: "hit!"});		  
+//		  }
+//	  });
+	  
+	  
+	  
+	  
+
+  });

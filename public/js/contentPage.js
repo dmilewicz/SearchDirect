@@ -1,26 +1,16 @@
-// $(document).ready(function() {
-
-//   // $(".quote").append("HIHIHIHIHI");
-
-//   extractWords();
-
-//   function extractWords() {
-//     var textElement  = $(".quote").html();
-//     console.log(textElement);
-//   };
-// });
 
 
 
 
-$(document).ready(function() {
-	console.log("running query");
-	chrome.storage.sync.get(null, function (obj) {
-		if (obj != undefined) {
-			console.log(obj);
-		}
-	});
 
 
+	
+chrome.runtime.onMessage.addListener(
+	function(request, sender) {
+		console.log(request);
+		
+		window.find(request.searchString);
+//		$("window").scrollTop($("*:contains(request.searchString):eq(0)").offset().top);
+		
 });
 

@@ -6,7 +6,7 @@
  */
 
 
-var port = chrome.runtime.connect();
+varport = chrome.runtime.connect();
 
 window.addEventListener("hashchange", function() {alert("changed");}, false);
 
@@ -20,17 +20,12 @@ window.addEventListener("message", function(event) {
     console.log("Content script received: " + event.data.text);
     
     if (event.data.text !== undefined) {
-    	console.log("running set... ");
-    	chrome.storage.local.set({ searchString : event.data.text });
-    	console.log("set variable");
+    	console.log("running message send ... ");
+    	chrome.runtime.sendMessage({ searchString : event.data.text });
+    	console.log("message sent");
     }
     
-    chrome.storage.local.get('searchString', function(obj) {
-    	console.log(obj);
-    });
-    chrome.storage.local.get(null, function(obj) {
-    	console.log(obj);
-    });
+    
   }
 }, false);
 
@@ -47,12 +42,20 @@ $(document).ready(function() {
 	if (window.location.hostname == "www.google.com" ) {
 		 // call the function to inject hyperlinks		 
 //		 setTimeout(identifyMessage, 1000);
+		
+//		$(".g").load(identifyMessage);
+		
 		if (window.location.pathname === "/search") {
 			identifyMessage();
 		} else {
 			console.log("/webhp");
 			setTimeout( identifyMessage, 1000);
 		}
+		
+		
+		
+		
+		
 		
 //		 var ajaxContent = document.getElementById("ires");
 //		 ajaxContent.addEventListener("load", function() {alert('yes');});
@@ -135,8 +138,10 @@ function injectHyperlink(message) {
 	// get relevant text from the webpage
 	var stText = stContent.innerHTML;
 	     
+	
+	
 	// split by elipsis
-	var contentFragments = stText.split("...");
+	var contentFragments = stText.split(/\s?\.\.+\s?/);
 	   
 	// add href links
 	for (var i = 0; i < contentFragments.length; i++) {
