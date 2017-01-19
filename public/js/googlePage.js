@@ -8,7 +8,6 @@
 
 varport = chrome.runtime.connect();
 
-window.addEventListener("hashchange", function() {alert("changed");}, false);
 
 // add listener for the text message from page
 window.addEventListener("message", function(event) {
