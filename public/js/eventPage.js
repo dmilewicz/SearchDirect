@@ -6,19 +6,42 @@
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 	  
-		alert("Recieved " + request.type + " at event page");
-	  
-	  
+		
 		if (request.type && (request.type == "REPORT_STRING")) {
-//	  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});		  
-	  
-			setTimeout( function() {
-				chrome.tabs.sendMessage(sender.tab.id, { type: "RELAY_STRING", searchString : request.searchString, page : link });	
-				chrome.browserAction.setBadgeText({text: "4" });
-			  
-			}, 5000);
+		
+			var intervalId = setInterval(function () {
+		
+				chrome.tabs.getSelected( function (tab) {
+					
+					alert("tab url: " + tab.url + "\n page url: " + request.page);
+					if (tab.url == request.page) {
+						chrome.tabs.sendMessage(sender.tab.id, { type: "RELAY_STRING", searchString : request.searchString, page : request.page });	
+						clearInterval(intervalId);
+					}
+					
+				});
+				
+			}, 100);
 		}
+		
+//		chrome.tabs.getSelected( function (tab) {
+//			alert(tab.url);
+//			if (tab.url == page.link) {
+//				alert("target page");
+//			}
+//		});
 	  
+//		if (request.type && (request.type == "REPORT_STRING")) {
+//	  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});		  
+			
+//			setTimeout( function() {
+//						
+//				chrome.tabs.sendMessage(sender.tab.id, { type: "RELAY_STRING", searchString : request.searchString, page : request.page });	
+//				chrome.browserAction.setBadgeText({text: "5" });
+//			  
+//			},3000);
+//		}
+//	  
 	  
 //	  {searchString: request.searchString, page:resquest.page}
 	  

@@ -8,25 +8,27 @@ varport = chrome.runtime.connect();
 	
 chrome.runtime.onMessage.addListener(
 	function(request, sender) {
-		alert("Recieved " + requet.type + "at content page" );
+		alert("Recieved " + request.type + " at content page" );
 		
-		if (request.type && (event.data.type == "RELAY_STRING")) {
+		if (request.type && (request.type == "RELAY_STRING")) {
 			
-			console.log(request);
+			
+		console.log(request);
+		console.log(request.page);
 			
 	//		window.find(request.searchString);
 	//		$("window").scrollTop($(":contains(\"" + request.searchString +"\"):eq(0)").offset().top);
 			
-			var stringContainers = $(":contains("+ request.searchString +")");
-			console.log(stringContainers);
+		var stringContainers = $(":contains('"+ request.searchString +"')");
+		console.log({result : stringContainers});
 			
-			$("window").scrollTop(stringContainers.height());
+		$("window").scrollTop(stringContainers.height());
 			
 			// set the little number overlay to number of results.
 			// display results by content 
 		}
 		
 		
-		
-});
+	}
+);
 

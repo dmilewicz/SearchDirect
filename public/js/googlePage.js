@@ -210,7 +210,7 @@ function injectHyperlink(message) {
 	$(".addedLink").off().on('mousedown', function() {
 //		window.postMessage( { type: 'REPORT_STRING', text: this.innerText , page: link} , '*');
 		
-		chrome.runtime.sendMessage({ type: "REPORT_STRING", searchString : this.innerText , page : link });
+		chrome.runtime.sendMessage({ type: "REPORT_STRING", searchString : this.innerText , page : this.href });
 	});
 };
    
