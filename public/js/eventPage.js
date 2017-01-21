@@ -15,11 +15,13 @@ chrome.runtime.onMessage.addListener(
 	  
 	  setTimeout( function() {
 
-		  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});	
+		  chrome.tabs.sendMessage(sender.tab.id, request);	
+		  chrome.browserAction.setBadgeText("8");
+		  
 	  }, 5000);
 	  
 	  
-	  
+//	  {searchString: request.searchString, page:resquest.page}
 	  
 //	  chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
 //		  

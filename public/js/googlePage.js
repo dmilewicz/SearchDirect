@@ -20,7 +20,7 @@ window.addEventListener("message", function(event) {
     
     if (event.data.text !== undefined) {
     	console.log("running message send ... ");
-    	chrome.runtime.sendMessage({ searchString : event.data.text });
+    	chrome.runtime.sendMessage({ searchString : event.data.text , page: event.data.page});
     	console.log("message sent");
     }
     
@@ -28,32 +28,50 @@ window.addEventListener("message", function(event) {
   }
 }, false);
 
-//console.log(document);
 
-//var ajaxContent = document.getElementById("ires");
-//ajaxContent.addEventListener("load", function() {alert('yello yes');}, false);
 
-var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
+if (window.location.hostname == "www.google.com" ) {
+	$(".g").ready(function() {
+		console.log(this);
+	})
+}
+
+
+
+//var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
+var onMouseDownEvent = "class=\"addedLink\"";
+
+$( "#main" ).bind( "DOMSubtreeModified", function() {
+	  console.log("hello"); 
+	});
+
 
 
 $(document).ready(function() {
-	 	
+////	 	
 	if (window.location.hostname == "www.google.com" ) {
-		 // call the function to inject hyperlinks		 
-//		 setTimeout(identifyMessage, 1000);
-		
-//		$(".g").load(identifyMessage);
+//		 // call the function to inject hyperlinks		 
+////		 setTimeout(identifyMessage, 1000);
+//		console.log($(".g"));
+//		$(".g").on('load', function() {
+//				console.log("whats up");
+//			});
+//});
 		
 		if (window.location.pathname === "/search") {
 			identifyMessage();
-		} else {
-			console.log("/webhp");
-			setTimeout( identifyMessage, 1000);
-		}
+		} 
+//		else {
+//			console.log("/webhp");
+//			setTimeout( identifyMessage, 1000);
+//		}
 		
 		
 		
-		
+//		$(".g").on('load', function() {
+//			console.log("reloaded");
+//		});
+	}
 		
 		
 //		 var ajaxContent = document.getElementById("ires");
@@ -68,24 +86,22 @@ $(document).ready(function() {
 //		 newSearch.onsubmit = function () {alert("tried again")};
 //		 newSearch.addEventListener("submit", saveText, false);
 //		 console.log("done");
-		 
-	}
+//		 
+//	}
 });
 
  
  	
 function identifyMessage() {
 	
+//	var arraySpan = $(".g").on('load', function() {
+//		for (var i = 0; i < 10; i++) {
+//			injectHyperlink(arraySpan[i]);
+//		}
+//	})
 	var arraySpan = document.getElementsByClassName("g");
 	
-//	while (arrayspan[i] == undefined) {
-//		setTimeout(function(arraySpan) { arraySpan = document.getElementsByClassName("g"); }, 10, arraySpan);
-//	}
-	    
-//		while (arraySpan[i] == undefined) {
-//			console.log("check");
-//			arraySpan = document.getElementsByClassName("g");
-//		}
+	
 	
 	if (arraySpan == undefined) {
 		console.log("failed to retrieve the search results");
@@ -136,8 +152,6 @@ function injectHyperlink(message) {
 	   
 	// get relevant text from the webpage
 	var stText = stContent.innerHTML;
-	     
-	
 	
 	// split by elipsis
 	var contentFragments = stText.split(/\s?\.\.+\s?/);
@@ -152,13 +166,12 @@ function injectHyperlink(message) {
 	   
 	// refill element content
 	stContent.innerHTML = newContent;
+	//var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
 
+	$(".addedLink").off().on('mousedown', function() {
+		window.postMessage( { type: 'FROM_PAGE', text: this.innerText , page: link} , '*');
+	});
 };
-   
-   
-function saveText() {
-	alert("hello");
-}
    
    
  
