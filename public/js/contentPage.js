@@ -1,6 +1,7 @@
 
 
 
+varport = chrome.runtime.connect();
 
 
 
@@ -13,9 +14,16 @@ chrome.runtime.onMessage.addListener(
 //		$("window").scrollTop($(":contains(\"" + request.searchString +"\"):eq(0)").offset().top);
 		
 		var stringContainers = $(":contains("+ request.searchString +")")
+		console.log(stringContainers);
+		
+		$("window").scrollTop(stringContainers.height());
 		
 		// set the little number overlay to number of results.
-		// display results by 
+		// display results by content 
+		
+		
+		
+		
 		
 });
 

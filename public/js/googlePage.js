@@ -15,12 +15,12 @@ window.addEventListener("message", function(event) {
   if (event.source != window)
     return;
 
-  if (event.data.type && (event.data.type == "FROM_PAGE")) {
+  if (event.data.type && (event.data.type == "REPORT_STRING")) {
     console.log("Content script received: " + event.data.text);
     
     if (event.data.text !== undefined) {
     	console.log("running message send ... ");
-    	chrome.runtime.sendMessage({ searchString : event.data.text , page: event.data.page});
+    	chrome.runtime.sendMessage({ type: 'GOOG_TO_', searchString : event.data.text , page: event.data.page});
     	console.log("message sent");
     }
     
@@ -38,12 +38,9 @@ if (window.location.hostname == "www.google.com" ) {
 
 
 
-//var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
 var onMouseDownEvent = "class=\"addedLink\"";
 
-$( "#main" ).bind( "DOMSubtreeModified", function() {
-	  console.log("hello"); 
-	});
+
 
 
 
@@ -90,6 +87,42 @@ $(document).ready(function() {
 //	}
 });
 
+
+
+
+
+
+
+MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+
+var observer = new MutationObserver(function(mutations, observer) {
+    // fired when a mutation occurs
+    console.log(mutations, observer);
+    console.log(mutations);
+    
+    // ...
+});
+
+//define what element should be observed by the observer
+//and what types of mutations trigger the callback
+observer.observe(document, {
+	subtree: true,
+	attributes: true
+	//...
+});
+
+
+
+
+
+
+
+
+
+
+
+
  
  	
 function identifyMessage() {
@@ -112,6 +145,13 @@ function identifyMessage() {
 		}
 	}
 };
+
+
+
+
+
+
+
 
 
 
@@ -169,7 +209,7 @@ function injectHyperlink(message) {
 	//var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
 
 	$(".addedLink").off().on('mousedown', function() {
-		window.postMessage( { type: 'FROM_PAGE', text: this.innerText , page: link} , '*');
+		window.postMessage( { type: 'REPORT_STRING', text: this.innerText , page: link} , '*');
 	});
 };
    

@@ -9,14 +9,15 @@ chrome.runtime.onMessage.addListener(
 	  
 	  
 
-//	  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});	
-
+//	  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});		  
 	  
 	  
 	  setTimeout( function() {
-
+		  
+		  
+		  
 		  chrome.tabs.sendMessage(sender.tab.id, request);	
-		  chrome.browserAction.setBadgeText("8");
+		  chrome.browserAction.setBadgeText({text: "4" });
 		  
 	  }, 5000);
 	  
