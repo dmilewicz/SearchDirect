@@ -6,7 +6,7 @@
  */
 
 
-varport = chrome.runtime.connect();
+//varport = chrome.runtime.connect();
 
 
 // add listener for the text message from page
@@ -16,12 +16,11 @@ window.addEventListener("message", function(event) {
     return;
 
   if (event.data.type && (event.data.type == "REPORT_STRING")) {
-    console.log("Content script received: " + event.data.text);
     
     if (event.data.text !== undefined) {
-    	console.log("running message send ... ");
-    	chrome.runtime.sendMessage({ type: 'GOOG_TO_', searchString : event.data.text , page: event.data.page});
-    	console.log("message sent");
+//    	console.log("running message send ... ");
+//    	chrome.runtime.sendMessage({ type: "RELAY_STRING", searchString : event.data.text , page: event.data.page});
+//    	console.log("message sent");
     }
     
     
@@ -98,8 +97,8 @@ MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
 var observer = new MutationObserver(function(mutations, observer) {
     // fired when a mutation occurs
-    console.log(mutations, observer);
-    console.log(mutations);
+//    console.log(mutations, observer);
+//    console.log(mutations);
     
     // ...
 });
@@ -209,7 +208,9 @@ function injectHyperlink(message) {
 	//var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
 
 	$(".addedLink").off().on('mousedown', function() {
-		window.postMessage( { type: 'REPORT_STRING', text: this.innerText , page: link} , '*');
+//		window.postMessage( { type: 'REPORT_STRING', text: this.innerText , page: link} , '*');
+		
+		chrome.runtime.sendMessage({ type: "REPORT_STRING", searchString : this.innerText , page : link });
 	});
 };
    

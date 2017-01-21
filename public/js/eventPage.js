@@ -4,22 +4,20 @@
  */
 
 chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
+	function(request, sender, sendResponse) {
+	  
+		alert("Recieved " + request.type + " at event page");
 	  
 	  
-	  
-
+		if (request.type && (request.type == "REPORT_STRING")) {
 //	  chrome.tabs.sendMessage(sender.tab.id, {searchString: request.searchString});		  
 	  
-	  
-	  setTimeout( function() {
-		  
-		  
-		  
-		  chrome.tabs.sendMessage(sender.tab.id, request);	
-		  chrome.browserAction.setBadgeText({text: "4" });
-		  
-	  }, 5000);
+			setTimeout( function() {
+				chrome.tabs.sendMessage(sender.tab.id, { type: "RELAY_STRING", searchString : request.searchString, page : link });	
+				chrome.browserAction.setBadgeText({text: "4" });
+			  
+			}, 5000);
+		}
 	  
 	  
 //	  {searchString: request.searchString, page:resquest.page}

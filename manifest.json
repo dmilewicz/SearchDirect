@@ -22,7 +22,7 @@
   "content_scripts": [
     {
       "run_at": "document_end",
-      "matches": ["http://*/*", "https://*/*" ],
+      "matches":  ["http://www.google.com/*", "https://www.google.com/*" ],
       "css": ["public/stylesheets/custom.css"],
       "js": ["public/lib/jquery-3.1.0.min.js", "public/js/googlePage.js"]
     }, 
