@@ -6,36 +6,6 @@
  */
 
 
-//varport = chrome.runtime.connect();
-
-
-// add listener for the text message from page
-window.addEventListener("message", function(event) {
-  // We only accept messages from ourselves
-  if (event.source != window)
-    return;
-
-  if (event.data.type && (event.data.type == "REPORT_STRING")) {
-    
-    if (event.data.text !== undefined) {
-//    	console.log("running message send ... ");
-//    	chrome.runtime.sendMessage({ type: "RELAY_STRING", searchString : event.data.text , page: event.data.page});
-//    	console.log("message sent");
-    }
-    
-    
-  }
-}, false);
-
-
-
-if (window.location.hostname == "www.google.com" ) {
-	$(".g").ready(function() {
-		console.log(this);
-	})
-}
-
-
 
 var onMouseDownEvent = "class=\"addedLink\"";
 
@@ -43,9 +13,8 @@ var onMouseDownEvent = "class=\"addedLink\"";
 
 
 
-$(document).ready(function() {
-////	 	
-	if (window.location.hostname == "www.google.com" ) {
+//$(document).ready(function() {
+	
 //		 // call the function to inject hyperlinks		 
 ////		 setTimeout(identifyMessage, 1000);
 //		console.log($(".g"));
@@ -54,10 +23,10 @@ $(document).ready(function() {
 //			});
 //});
 		
-		if (window.location.pathname === "/search") {
-			identifyMessage();
-		} 
-//		else {
+//		if (window.location.pathname === "/search") {
+//			console.log("Running...")
+//			identifyMessage();
+//		} else {
 //			console.log("/webhp");
 //			setTimeout( identifyMessage, 1000);
 //		}
@@ -66,17 +35,10 @@ $(document).ready(function() {
 		
 //		$(".g").on('load', function() {
 //			console.log("reloaded");
-//		});
-	}
-		
-		
+//		});	
 //		 var ajaxContent = document.getElementById("ires");
 //		 ajaxContent.addEventListener("load", function() {alert('yes');});
 //		 console.log(ajaxContent);
-		 
-		 
-		 
-		 
 //		 newSearch = document.getElementById("tsf");
 //		 console.log("adding event listener...");
 //		 newSearch.onsubmit = function () {alert("tried again")};
@@ -84,8 +46,7 @@ $(document).ready(function() {
 //		 console.log("done");
 //		 
 //	}
-});
-
+//});
 
 
 
@@ -98,25 +59,22 @@ MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var observer = new MutationObserver(function(mutations, observer) {
     // fired when a mutation occurs
 //    console.log(mutations, observer);
-//    console.log(mutations);
+    console.log(mutations);
+    console.log("running identify...")
+    identifyMessage();
+//	mutations.forEach(function(mutation) {
+//	    console.log(mutation);
+//	});    
     
     // ...
 });
 
 //define what element should be observed by the observer
 //and what types of mutations trigger the callback
-observer.observe(document, {
-	subtree: true,
-	attributes: true
+observer.observe($("#main").get(0), {
+	childList : true
 	//...
 });
-
-
-
-
-
-
-
 
 
 
@@ -133,15 +91,16 @@ function identifyMessage() {
 //	})
 	var arraySpan = document.getElementsByClassName("g");
 	
-	
+	$(".g").each(function(i, obj) {
+		console.log()
+		injectHyperlink(obj);
+	});
 	
 	if (arraySpan == undefined) {
 		console.log("failed to retrieve the search results");
 		return;
 	} else {
-		for (var i = 0; i < 10; i++) {
-			injectHyperlink(arraySpan[i]);
-		}
+		
 	}
 };
 
@@ -159,9 +118,16 @@ function identifyMessage() {
    
    
 function injectHyperlink(message) {
-	   
-	var titleElement = message.getElementsByClassName("r")[0];
-	   
+	
+	if (message === undefined) { 
+		console.log("g class element undefined");
+		return; 
+	}
+	
+	var titleElement = message;
+	
+	console.log($(".r > a > .st > .f"));
+	
 	if (titleElement === undefined) {
 		return;
 	}
@@ -187,8 +153,8 @@ function injectHyperlink(message) {
 	if (fContent !== undefined) {
 		newContent += fContent.outerHTML;
 		stContent.removeChild(fContent);
-	   } 
-	   
+	  } 
+	
 	// get relevant text from the webpage
 	var stText = stContent.innerHTML;
 	
@@ -198,7 +164,7 @@ function injectHyperlink(message) {
 	// add href links
 	for (var i = 0; i < contentFragments.length; i++) {
 		newContent += "<a " + onMouseDownEvent + " style=\"color: inherit; text-decoration: none;\" href=\"" + link + "\">" + contentFragments[i] + "</a>";
-		if (i != (contentFragments.length - 1)) {
+		if (i != (contentFragments.length - 1) && contentFragments[i] != "") {
 			newContent += "...";
 		}
 	}
@@ -212,7 +178,31 @@ function injectHyperlink(message) {
 		
 		chrome.runtime.sendMessage({ type: "REPORT_STRING", searchString : this.innerText , page : this.href });
 	});
+	console.log(stContent.innerHTML);
+	console.log("identifyMessage successful")
 };
    
    
+
+
+
+//varport = chrome.runtime.connect();
+
+//add listener for the text message from page
+//window.addEventListener("message", function(event) {
+// We only accept messages from ourselves
+//if (event.source != window)
+//  return;
+//
+//if (event.data.type && (event.data.type == "REPORT_STRING")) {
+//  
+//  if (event.data.text !== undefined) {
+//  	console.log("running message send ... ");
+//  	chrome.runtime.sendMessage({ type: "RELAY_STRING", searchString : event.data.text , page: event.data.page});
+//  	console.log("message sent");
+//  }
+//  
+//  
+//}
+//}, false);
  

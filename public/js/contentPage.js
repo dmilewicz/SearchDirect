@@ -1,7 +1,6 @@
 
 
 
-varport = chrome.runtime.connect();
 
 
 
@@ -14,12 +13,11 @@ chrome.runtime.onMessage.addListener(
 			
 			
 		console.log(request);
-		console.log(request.page);
 			
 	//		window.find(request.searchString);
 	//		$("window").scrollTop($(":contains(\"" + request.searchString +"\"):eq(0)").offset().top);
 			
-		var stringContainers = $(":contains('"+ request.searchString +"')");
+		var stringContainers = $(":contains(\""+ request.searchString +"\")");
 		console.log({result : stringContainers});
 			
 		$("window").scrollTop(stringContainers.height());
