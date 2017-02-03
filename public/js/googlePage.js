@@ -10,6 +10,7 @@
 var onMouseDownEvent = "class=\"addedLink\"";
 
 
+chrome.runtime.sendMessage({ type: "AT_GOOGLE", hash: window.location.hash});
 
 
 
@@ -92,7 +93,7 @@ function identifyMessage() {
 	var arraySpan = document.getElementsByClassName("g");
 	
 	$(".g").each(function(i, obj) {
-		console.log()
+//		console.log(obj);
 		injectHyperlink(obj);
 	});
 	
@@ -125,8 +126,8 @@ function injectHyperlink(message) {
 	}
 	
 	var titleElement = message;
-	
-	console.log($(".r > a > .st > .f"));
+//	console.log("attempting parent element selection using jquery:");
+//	console.log($(".r > a"));
 	
 	if (titleElement === undefined) {
 		return;
@@ -139,7 +140,7 @@ function injectHyperlink(message) {
 	var stContent = message.getElementsByClassName("st")[0];
 	
 	if (stContent === undefined) {
-		console.log("No stContent found at element");
+//		console.log("No stContent found at element");
 		return;
 	}
 	
@@ -178,11 +179,15 @@ function injectHyperlink(message) {
 		
 		chrome.runtime.sendMessage({ type: "REPORT_STRING", searchString : this.innerText , page : this.href });
 	});
-	console.log(stContent.innerHTML);
-	console.log("identifyMessage successful")
+//	console.log(stContent.innerHTML);
+//	console.log("identifyMessage successful")
 };
    
    
+
+
+
+
 
 
 
