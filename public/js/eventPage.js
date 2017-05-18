@@ -15,13 +15,13 @@ chrome.runtime.onMessage.addListener(
 			chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {				
 
 				if (info.url === request.page && tabId == sender.tab.id ) {
-					alert("Made it to content page\n\n" + info.url + "\n\n\n" + tabId + "\n\n\nSending message...");
+					console.log("Made it to content page\n\n" + info.url + "\n\n" + tabId + "\n\nSending message...");
 					
 					
 					// send search string to content pages
 					chrome.tabs.sendMessage(sender.tab.id, { type: "RELAY_STRING", searchString : request.searchString, page : request.page });	
 					
-					console.log(this);
+					// console.log(this);
 					chrome.tabs.onUpdated.removeListener(sendString);
 				}
 			});
@@ -32,13 +32,13 @@ chrome.runtime.onMessage.addListener(
 		else if(request.type && (request.type == "BADGE_UPDATE")) {
 
 
-			alert("Received badge changed");
+			// console.log("Received badge changed");
 			chrome.browserAction.setBadgeText({text: request.text.toString() });
 		}
 		// check if at google message appeared
 		else if(request.type && (request.type == "AT_GOOGLE")) {
-			alert("At Google");
-			var prevHash = "";
+			// alert("At Google");
+			// var prevHash = "";
 			// chrome.tabs.onUpdated.addListener(function reportGoogle(tabId, info, tab) {
 			// 	alert("At Google. Created Event Listener: \n\n" + info.url + "\n\n + tabId");
 			//

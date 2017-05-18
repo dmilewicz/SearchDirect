@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2016 David Milewicz and Leon Wee
+ * Copyright (c) 2016 David Milewicz
  *
  * This code is executed every
  *
@@ -12,30 +12,24 @@ var onMouseDownEvent = "class=\"addedLink\"";
 
 chrome.runtime.sendMessage({ type: "AT_GOOGLE", hash: window.location.hash});
 
-window.onhashchange = function() {
-	alert("hello hashchange");
-};
-
-
-
-
 
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
 
+
+
+$(function() {
+	console.log("running identify...");
+    identifyMessage();
+});
+
+
 var observer = new MutationObserver(function(mutations, observer) {
-    // fired when a mutation occurs
-//    console.log(mutations, observer);
+
     console.log(mutations);
     console.log("running identify...");
     identifyMessage();
 
-
-//	mutations.forEach(function(mutation) {
-//	    console.log(mutation);
-//	});    
-    
-    // ...
 });
 
 // define what element should be observed by the observer
