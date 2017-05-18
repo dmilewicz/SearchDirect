@@ -7,15 +7,13 @@ chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 	  
 //		alert("Recieved " + request.type + " at event page")
+
+		// report the string to be searched for
 		if (request.type && (request.type == "REPORT_STRING")) {
 			
 			
 			chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {				
-//				var t;
-//				
-//				if ()
-//				
-//				identifyMessage();
+
 				if (info.url === request.page && tabId == sender.tab.id ) {
 					alert("Made it to content page\n\n" + info.url + "\n\n\n" + tabId + "\n\n\nSending message...");
 					
@@ -28,21 +26,26 @@ chrome.runtime.onMessage.addListener(
 				}
 			});
 			
-		} else if(request.type && (request.type == "BADGE_UPDATE")) {
+		}
+
+		// check or badge update condition
+		else if(request.type && (request.type == "BADGE_UPDATE")) {
+
+
 			alert("Received badge changed");
 			chrome.browserAction.setBadgeText({text: request.text.toString() });
-		} else if(request.type && (request.type == "AT_GOOGLE")) {
+		}
+		// check if at google message appeared
+		else if(request.type && (request.type == "AT_GOOGLE")) {
 			alert("At Google");
 			var prevHash = "";
-			chrome.tabs.onUpdated.addListener(function reportGoogle(tabId, info, tab) {
-				alert("At Google. Created Event Listener: \n\n" + info.url + "\n\n + tabId");
-				
-				if (request.hash != prevHash && request.hash != undefined && tabId == sender.tab.id) {
-					prevHash == 
-					alert("Event listener fired for google change");
-					
-				} else if()
-			});
+			// chrome.tabs.onUpdated.addListener(function reportGoogle(tabId, info, tab) {
+			// 	alert("At Google. Created Event Listener: \n\n" + info.url + "\n\n + tabId");
+			//
+			// 	if (request.hash != prevHash && request.hash != undefined && tabId == sender.tab.id) {
+			// 		alert("Event listener fired for google change");
+			// 	}
+			// });
 		}
 		
 		

@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2016 David Milewicz and Leon Wee
  *
- *
+ * This code is executed every
  *
  */
 
@@ -12,43 +12,9 @@ var onMouseDownEvent = "class=\"addedLink\"";
 
 chrome.runtime.sendMessage({ type: "AT_GOOGLE", hash: window.location.hash});
 
-
-
-//$(document).ready(function() {
-	
-//		 // call the function to inject hyperlinks		 
-////		 setTimeout(identifyMessage, 1000);
-//		console.log($(".g"));
-//		$(".g").on('load', function() {
-//				console.log("whats up");
-//			});
-//});
-		
-//		if (window.location.pathname === "/search") {
-//			console.log("Running...")
-//			identifyMessage();
-//		} else {
-//			console.log("/webhp");
-//			setTimeout( identifyMessage, 1000);
-//		}
-		
-		
-		
-//		$(".g").on('load', function() {
-//			console.log("reloaded");
-//		});	
-//		 var ajaxContent = document.getElementById("ires");
-//		 ajaxContent.addEventListener("load", function() {alert('yes');});
-//		 console.log(ajaxContent);
-//		 newSearch = document.getElementById("tsf");
-//		 console.log("adding event listener...");
-//		 newSearch.onsubmit = function () {alert("tried again")};
-//		 newSearch.addEventListener("submit", saveText, false);
-//		 console.log("done");
-//		 
-//	}
-//});
-
+window.onhashchange = function() {
+	alert("hello hashchange");
+};
 
 
 
@@ -61,8 +27,10 @@ var observer = new MutationObserver(function(mutations, observer) {
     // fired when a mutation occurs
 //    console.log(mutations, observer);
     console.log(mutations);
-    console.log("running identify...")
+    console.log("running identify...");
     identifyMessage();
+
+
 //	mutations.forEach(function(mutation) {
 //	    console.log(mutation);
 //	});    
@@ -70,18 +38,19 @@ var observer = new MutationObserver(function(mutations, observer) {
     // ...
 });
 
-//define what element should be observed by the observer
-//and what types of mutations trigger the callback
-observer.observe($("#main").get(0), {
-	childList : true
-	//...
+// define what element should be observed by the observer
+// and what types of mutations trigger the callback
+observer.observe($("#gsr").get(0), {
+	childList : true,
+	characterData : true
+
 });
 
 
 
 
 
- 
+
  	
 function identifyMessage() {
 	
@@ -111,12 +80,6 @@ function identifyMessage() {
 
 
 
-
-
-
-
-
-   
    
 function injectHyperlink(message) {
 	
@@ -174,6 +137,9 @@ function injectHyperlink(message) {
 	stContent.innerHTML = newContent;
 	//var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
 
+
+
+
 	$(".addedLink").off().on('mousedown', function() {
 //		window.postMessage( { type: 'REPORT_STRING', text: this.innerText , page: link} , '*');
 		
@@ -210,4 +176,42 @@ function injectHyperlink(message) {
 //  
 //}
 //}, false);
+
+
+
+//$(document).ready(function() {
+
+//		 // call the function to inject hyperlinks
+////		 setTimeout(identifyMessage, 1000);
+//		console.log($(".g"));
+//		$(".g").on('load', function() {
+//				console.log("whats up");
+//			});
+//});
+
+//		if (window.location.pathname === "/search") {
+//			console.log("Running...")
+//			identifyMessage();
+//		} else {
+//			console.log("/webhp");
+//			setTimeout( identifyMessage, 1000);
+//		}
+
+
+
+//		$(".g").on('load', function() {
+//			console.log("reloaded");
+//		});
+//		 var ajaxContent = document.getElementById("ires");
+//		 ajaxContent.addEventListener("load", function() {alert('yes');});
+//		 console.log(ajaxContent);
+//		 newSearch = document.getElementById("tsf");
+//		 console.log("adding event listener...");
+//		 newSearch.onsubmit = function () {alert("tried again")};
+//		 newSearch.addEventListener("submit", saveText, false);
+//		 console.log("done");
+//
+//	}
+//});
+
  

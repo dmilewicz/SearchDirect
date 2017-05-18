@@ -1,6 +1,9 @@
 
 
-
+/*
+ * This code is injected into the content page, which searches for the given string.
+ *
+ */
 
 
 
@@ -17,11 +20,9 @@ chrome.runtime.onMessage.addListener(
 	//		window.find(request.searchString);
 //			$("window").scrollTop($(":contains(\"" + request.searchString +"\"):eq(0)").offset().top);
 		
-			
-			var elems = $(":contains(\"" + request.searchString + "\"):last"); 
-		
-	
-		
+			// search for the string
+			var elems = $(":contains(\"" + request.searchString + "\"):last");
+
 			// get all elements including parents
 			var stringContainers = $(":contains(\""+ request.searchString +"\")");
 		
@@ -33,7 +34,9 @@ chrome.runtime.onMessage.addListener(
 		
 			// log resuts
 			console.log(trimmedContainers);
-			
+
+			// find the requested string.
+			// TODO: make a more robust finding algorithm
 			$(trimmedContainers[0]).find(":contains('" + request.searchString + "')").css("background", "#6a5acd");
 
 			
@@ -43,7 +46,8 @@ chrome.runtime.onMessage.addListener(
 			// Highlight
 		
 			// set the little number overlay to number of results.
-			// display results by content 
+			// display results by con
+			// tent
 		}
 		
 		
@@ -52,13 +56,13 @@ chrome.runtime.onMessage.addListener(
 
 
 function trimResults(results) {
-	// create  return array 
+	// create trimmed values array
 	var trArr = [];
 	
 	//counter variable
 	var i = 0;
 	
-	//
+	// add the leaf elements
 	while (results[i+1] != undefined) {
 		// add all leaf elements to the new array 
 		if (results[i + 1].parentNode != results[i]) {
