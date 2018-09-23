@@ -3,40 +3,54 @@
  * string will be saved on this page. Upon the next page load, if there is a string in the event page it will be passed to the next page an search for the string will commence. 
  */
 
+
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
-	  
+	  // console.log("HELLO rcvd msg at event page!")
 //		alert("Recieved " + request.type + " at event page")
+		debug_log("Recieved " + request.type + " at event page");
+
+    // if (!request.type) { // check for invalid message
+    //   return;
+	// }
+	
+		if (!request.type) {
+			debug_log("ERR: No type");
+		}
 
 		// report the string to be searched for
-		if (request.type && (request.type == "REPORT_STRING")) {
-			
+		else if (request.type == SEARCH_STRING_MSG) {
 			
 			chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {				
 
-				if (info.url === request.page && tabId == sender.tab.id ) {
-					console.log("Made it to content page\n\n" + info.url + "\n\n" + tabId + "\n\nSending message...");
-					
-					
+				if (/*info.url === request.page &&*/ tabId == sender.tab.id ) {
+					// debug_log("Made it to content page\n\n" + info.url + "\n\n" + tabId + "\n\nSending message...");
 					// send search string to content pages
-					chrome.tabs.sendMessage(sender.tab.id, { type: "RELAY_STRING", searchString : request.searchString, page : request.page });	
 					
-					// console.log(this);
+					console.log(request.searchString);
+
+					chrome.tabs.sendMessage(sender.tab.id, { type: RELAYED_SEARCH_STRING_MSG, searchString : request.searchString, page : request.page });
+					// chrome.browserAction.setBadgeText({ text: request.count.toString() });
+					
 					chrome.tabs.onUpdated.removeListener(sendString);
 				}
 			});
-			
 		}
 
 		// check or badge update condition
-		else if(request.type && (request.type == "BADGE_UPDATE")) {
+		else if (request.type == BADGE_UPDATE_MSG) {
+			console.log("badge update request:", request.count);
+			chrome.browserAction.setBadgeText({ text: request.count.toString() });
 
+			chrome.tabs.onActivated.addListener(function clearBadge(activeInfo) {
+				chrome.browserAction.setBadgeText({ text: "" });
 
-			// console.log("Received badge changed");
-			chrome.browserAction.setBadgeText({text: request.text.toString() });
+				chrome.tabs.onUpdated.removeListener(clearBadge);
+			});
+
 		}
 		// check if at google message appeared
-		else if(request.type && (request.type == "AT_GOOGLE")) {
+		else if (request.type == "AT_GOOGLE") {
 			// alert("At Google");
 			// var prevHash = "";
 			// chrome.tabs.onUpdated.addListener(function reportGoogle(tabId, info, tab) {
@@ -47,7 +61,8 @@ chrome.runtime.onMessage.addListener(
 			// 	}
 			// });
 		}
-		
+	}
+);
 		
 		
 		
@@ -72,7 +87,7 @@ chrome.runtime.onMessage.addListener(
 //				
 //			}, 50);
 //		}
-	});
+
 
 
 

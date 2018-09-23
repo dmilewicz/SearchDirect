@@ -7,6 +7,8 @@
 
 
 
+
+
 var onMouseDownEvent = "class=\"addedLink\"";
 
 
@@ -16,20 +18,16 @@ chrome.runtime.sendMessage({ type: "AT_GOOGLE", hash: window.location.hash});
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 
 
-
-
 $(function() {
 	console.log("running identify...");
     identifyMessage();
 });
 
-
+var counter = 0
 var observer = new MutationObserver(function(mutations, observer) {
-
     console.log(mutations);
-    console.log("running identify...");
+    console.log("running identify " + counter);
     identifyMessage();
-
 });
 
 // define what element should be observed by the observer
@@ -41,40 +39,24 @@ observer.observe($("#gsr").get(0), {
 });
 
 
-
-
-
-
- 	
 function identifyMessage() {
 	
-//	var arraySpan = $(".g").on('load', function() {
-//		for (var i = 0; i < 10; i++) {
-//			injectHyperlink(arraySpan[i]);
-//		}
-//	})
 	var arraySpan = document.getElementsByClassName("g");
 	
 	$(".g").each(function(i, obj) {
-//		console.log(obj);
 		injectHyperlink(obj);
 	});
-	
-	if (arraySpan == undefined) {
-		console.log("failed to retrieve the search results");
-		return;
-	} else {
-		
-	}
 };
 
 
 
 
-
-
-
-   
+/*
+ * Injects a hyperlink into the HTML of the given google HTML element. Currently this element
+ * should be a 'g' class element.
+ * @param message
+ *
+ */
 function injectHyperlink(message) {
 	
 	if (message === undefined) { 
@@ -83,8 +65,6 @@ function injectHyperlink(message) {
 	}
 	
 	var titleElement = message;
-//	console.log("attempting parent element selection using jquery:");
-//	console.log($(".r > a"));
 	
 	if (titleElement === undefined) {
 		return;
@@ -97,21 +77,20 @@ function injectHyperlink(message) {
 	var stContent = message.getElementsByClassName("st")[0];
 	
 	if (stContent === undefined) {
-//		console.log("No stContent found at element");
 		return;
 	}
 	
 	// get result date if present
 	var fContent = stContent.getElementsByClassName("f")[0];
-	   
+	
 	// create new html string
 	var newContent = "";
-	   
+	
 	// if present add the date to the new HTML string
 	if (fContent !== undefined) {
 		newContent += fContent.outerHTML;
 		stContent.removeChild(fContent);
-	  } 
+	}
 	
 	// get relevant text from the webpage
 	var stText = stContent.innerHTML;
@@ -129,18 +108,11 @@ function injectHyperlink(message) {
 	   
 	// refill element content
 	stContent.innerHTML = newContent;
-	//var onMouseDownEvent = "onmousedown=\"(function(e, obj) { window.postMessage( { type: 'FROM_PAGE', text: obj.innerText } , '*')}) (event, this)\""; 
-
-
-
 
 	$(".addedLink").off().on('mousedown', function() {
-//		window.postMessage( { type: 'REPORT_STRING', text: this.innerText , page: link} , '*');
-		
-		chrome.runtime.sendMessage({ type: "REPORT_STRING", searchString : this.innerText , page : this.href });
+		// debug_log("GOOGLE_PAGE: Sending messsage to event page. message:\n" + this.innerText);
+		chrome.runtime.sendMessage({ type: SEARCH_STRING_MSG, searchString : this.innerText , page : this.href });
 	});
-//	console.log(stContent.innerHTML);
-//	console.log("identifyMessage successful")
 };
    
    
