@@ -3,29 +3,24 @@
  * string will be saved on this page. Upon the next page load, if there is a string in the event page it will be passed to the next page an search for the string will commence. 
  */
 
+var tab_badges = {};
+
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
-	  // console.log("HELLO rcvd msg at event page!")
-//		alert("Recieved " + request.type + " at event page")
-		debug_log("Recieved " + request.type + " at event page");
 
-    // if (!request.type) { // check for invalid message
-    //   return;
-	// }
+		debug_log("Recieved " + request.type + " at event page");
 	
 		if (!request.type) {
 			debug_log("ERR: No type");
+			return;
 		}
 
 		// report the string to be searched for
 		else if (request.type == SEARCH_STRING_MSG) {
 			
-			chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {				
-
-				if (/*info.url === request.page &&*/ tabId == sender.tab.id ) {
-					// debug_log("Made it to content page\n\n" + info.url + "\n\n" + tabId + "\n\nSending message...");
-					// send search string to content pages
+			chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {
+				if (tabId == sender.tab.id ) {
 					
 					console.log(request.searchString);
 
@@ -37,39 +32,42 @@ chrome.runtime.onMessage.addListener(
 			});
 		}
 
-		// check or badge update condition
+		// check ofr badge update condition
 		else if (request.type == BADGE_UPDATE_MSG) {
 			console.log("badge update request:", request.count);
-			chrome.browserAction.setBadgeText({ text: request.count.toString() });
-
-			chrome.tabs.onActivated.addListener(function clearBadge(activeInfo) {
-				chrome.browserAction.setBadgeText({ text: "" });
-
-				chrome.tabs.onUpdated.removeListener(clearBadge);
-			});
-
+			badgeUpdate(sender.tab.id, request.count.toString());
 		}
+
 		// check if at google message appeared
 		else if (request.type == "AT_GOOGLE") {
-			// alert("At Google");
-			// var prevHash = "";
-			// chrome.tabs.onUpdated.addListener(function reportGoogle(tabId, info, tab) {
-			// 	alert("At Google. Created Event Listener: \n\n" + info.url + "\n\n + tabId");
-			//
-			// 	if (request.hash != prevHash && request.hash != undefined && tabId == sender.tab.id) {
-			// 		alert("Event listener fired for google change");
-			// 	}
-			// });
+
 		}
 	}
 );
 		
+chrome.tabs.onCreated.addListener(function(tab) {
+	tab_badges[tab.id] = "";
+});
 		
+chrome.tabs.onRemoved.addListener(function(tab) {
+	delete tab_badges[tab.id];
+});
+
+chrome.tabs.onActivated.addListener(function(info) {
+	chrome.browserAction.setBadgeText({ text: tab_badges[info.tabId] });
+});
 		
-		
-		
-		
-		
+chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
+	if (info.url) { // url has changed, clear the badge
+		badgeUpdate(tabId, "");
+	}
+});
+
+function badgeUpdate(id, msg) {
+	chrome.browserAction.setBadgeText({ text: msg });
+	tab_badges[id] = msg;
+}
+
 		
 //			var intervalId = setInterval(function () {
 //		

@@ -4,32 +4,32 @@
  * 
  */
 
-var observer = new MutationObserver(function(mutations, observer) {
-    try {
-        result = runFind(request.searchString);
-    } catch(err) {
-        console.log("ERROR");
-    }
+// var observer = new MutationObserver(function(mutations, observer) {
+//     try {
+//         result = runFind(request.searchString);
+//     } catch(err) {
+//         console.log("ERROR");
+//     }
     
-    console.log("result: ", result);
+//     console.log("result: ", result);
 
-    if (result.reverts.length > 0) {
-        chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count:"✔"}); //count: result.reverts.length });
-        console.log($(".selection")[0].getBoundingClientRect());
+//     if (result.reverts.length > 0) {
+//         chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count:"✔"}); //count: result.reverts.length });
+//         console.log($(".selection")[0].getBoundingClientRect());
 
-        var foundElement = $(".selection")[0].getBoundingClientRect().top;
-        window.scrollTo(0, $(".selection")[0].getBoundingClientRect().top - (window.innerHeight * .3));
-    } else {
-        // Look for the string in the header -- no processing at the moment
-        headResult = document.head.innerHTML.search(processString(request.searchString));
+//         var foundElement = $(".selection")[0].getBoundingClientRect().top;
+//         window.scrollTo(0, $(".selection")[0].getBoundingClientRect().top - (window.innerHeight * .3));
+//     } else {
+//         // Look for the string in the header -- no processing at the moment
+//         headResult = document.head.innerHTML.search(processString(request.searchString));
 
-        if (headResult >= 0) {
-            chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "#" });
-        } else {
-            chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "!" });
-        }
-    }
-});
+//         if (headResult >= 0) {
+//             chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "#" });
+//         } else {
+//             chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "!" });
+//         }
+//     }
+// });
 
 // regex to designate what constitutes acceptable characters between words
 var whitespace = "[\\n\\r\\s]*";
@@ -40,7 +40,6 @@ var escapeCharacters = "()";
 
 chrome.runtime.onMessage.addListener(
 
-    
 	function(request, sender) {        
 		if (request.type && (request.type == RELAYED_SEARCH_STRING_MSG)) {
 			console.log(request);
@@ -48,11 +47,7 @@ chrome.runtime.onMessage.addListener(
 
         document.addEventListener("DOMContentLoaded", function() {
 
-            // observer.observe(document, {
-            //     childList : true,
-            //     characterData : true
-            // });
-            // alert("ran");
+            var result;
 
             try {
                 result = runFind(request.searchString);
@@ -73,23 +68,12 @@ chrome.runtime.onMessage.addListener(
                 // Look for the string in the header -- no processing at the moment
                 headResult = document.head.innerHTML.search(processString(request.searchString));
         
-        
                 if (headResult >= 0) {
                     chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "#" });
                 } else {
                     chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "!" });
                 }
             }
-
-            // chrome.tabs.getCurrent(function(tab) {
-            //     chrome.tabs.onActivated.addListener(function(activeInfo) {
-            //         if (tab.id == activeInfo.tabId) {
-            //             chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "s" });
-            //         }
-            //     });
-            // });
-
-           
         });
     }
 );
@@ -97,7 +81,7 @@ chrome.runtime.onMessage.addListener(
 function processString(searchString) {
     return searchString.trim()
                        .replace(new RegExp(" ", "g"), whitespace) // unify whitespace
-                       .replace(/[()$^*?]/g, '\\$&') // escape characters
+                       .replace(/[()$^?]/g, '\\$&') // escape characters
                        .replace(/[.]/g, '\\$&?') // make periods optional
                        .replace(/[']/g, '(’|\')'); // match right single quotation mark to apostrophe
 }
