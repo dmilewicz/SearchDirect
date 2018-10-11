@@ -21,6 +21,12 @@ var BADGE_UPDATE_MSG = "BADGE_UPDATE";
 var DEBUG = 1;
 
 
+var SEARCH_FAILURE = "X";
+var SEARCH_SUCCESS = "✔";
+var SEARCH_HEADER  = "#";
+
+var RED = "#FF0000";
+
 
 //=================================================================================================
 // SYSTEM FUNCTIONS

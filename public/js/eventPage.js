@@ -16,46 +16,29 @@ chrome.runtime.onMessage.addListener(
 			return;
 		}
 
-		// report the string to be searched for
-		else if (request.type == SEARCH_STRING_MSG) {
-			
-			chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {
-				if (tabId == sender.tab.id ) {
-					
-					console.log(request.searchString);
+		switch (request.type) {
 
-					chrome.tabs.sendMessage(sender.tab.id, { type: RELAYED_SEARCH_STRING_MSG, searchString : request.searchString, page : request.page });
-					// chrome.browserAction.setBadgeText({ text: request.count.toString() });
-					
-					chrome.tabs.onUpdated.removeListener(sendString);
-				}
-			});
-		}
+			// report the string to be searched for
+			case SEARCH_STRING_MSG: 
+				
+				chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {
+					if (tabId == sender.tab.id) {
+						console.log(request.searchString);
+						chrome.tabs.sendMessage(sender.tab.id, { type: RELAYED_SEARCH_STRING_MSG, searchString : request.searchString, page : request.page });
+						chrome.tabs.onUpdated.removeListener(sendString);
+					}
+				});
+				break;
 
-		// check ofr badge update condition
-		else if (request.type == BADGE_UPDATE_MSG) {
-			console.log("badge update request:", request.count);
-			badgeUpdate(sender.tab.id, request.count.toString());
-		}
-
-		// check if at google message appeared
-		else if (request.type == "AT_GOOGLE") {
+			// check ofr badge update condition
+			case BADGE_UPDATE_MSG: 
+				console.log("badge update request:", request.count);
+				badgeUpdate(sender.tab.id, request.count);
+				break;
 
 		}
 	}
 );
-		
-chrome.tabs.onCreated.addListener(function(tab) {
-	tab_badges[tab.id] = "";
-});
-		
-chrome.tabs.onRemoved.addListener(function(tab) {
-	delete tab_badges[tab.id];
-});
-
-chrome.tabs.onActivated.addListener(function(info) {
-	chrome.browserAction.setBadgeText({ text: tab_badges[info.tabId] });
-});
 		
 chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
 	if (info.url) { // url has changed, clear the badge
@@ -64,7 +47,12 @@ chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
 });
 
 function badgeUpdate(id, msg) {
-	chrome.browserAction.setBadgeText({ text: msg });
+
+	if (msg == SEARCH_FAILURE) {
+		chrome.browserAction.setBadgeBackgroundColor({ color: RED, tabId:id});
+	}
+
+	chrome.browserAction.setBadgeText({ text: msg , tabId : id});
 	tab_badges[id] = msg;
 }
 

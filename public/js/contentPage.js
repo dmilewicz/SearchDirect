@@ -31,17 +31,14 @@
 //     }
 // });
 
-// regex to designate what constitutes acceptable characters between words
-var whitespace = "[\\n\\r\\s]*";
-
-// String with all the characters that should be escaped in it
-var escapeCharacters = "()";
 
 
 chrome.runtime.onMessage.addListener(
 
-	function(request, sender) {        
+	function(request, sender) {    
+        
 		if (request.type && (request.type == RELAYED_SEARCH_STRING_MSG)) {
+
 			console.log(request);
         }
 
@@ -57,9 +54,10 @@ chrome.runtime.onMessage.addListener(
             
             console.log("result: ", result);
             var badgeResult = "";
+
         
             if (result.reverts.length > 0) {
-                chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count:"✔"}); //count: result.reverts.length });
+                chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count:SEARCH_SUCCESS}); //count: result.reverts.length });
                 console.log($(".selection")[0].getBoundingClientRect());
         
                 var foundElement = $(".selection")[0].getBoundingClientRect().top;
@@ -67,11 +65,13 @@ chrome.runtime.onMessage.addListener(
             } else {
                 // Look for the string in the header -- no processing at the moment
                 headResult = document.head.innerHTML.search(processString(request.searchString));
-        
+                
                 if (headResult >= 0) {
-                    chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "#" });
+                    alert("in header");
+                    chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: SEARCH_HEADER });
                 } else {
-                    chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: "!" });
+                    alert("unfound");
+                    chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: SEARCH_FAILURE });
                 }
             }
         });
@@ -79,6 +79,9 @@ chrome.runtime.onMessage.addListener(
 );
 
 function processString(searchString) {
+    // regex to designate what constitutes acceptable characters between words
+    var whitespace = "[\\n\\r\\s]*";
+
     return searchString.trim()
                        .replace(new RegExp(" ", "g"), whitespace) // unify whitespace
                        .replace(/[()$^?]/g, '\\$&') // escape characters

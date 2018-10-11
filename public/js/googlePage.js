@@ -11,12 +11,7 @@
 
 var onMouseDownEvent = "class=\"addedLink\"";
 
-
-chrome.runtime.sendMessage({ type: "AT_GOOGLE", hash: window.location.hash});
-
-
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
-
 
 $(function() {
 	console.log("running identify...");
@@ -26,7 +21,9 @@ $(function() {
 var counter = 0
 var observer = new MutationObserver(function(mutations, observer) {
     console.log(mutations);
-    console.log("running identify " + counter);
+	console.log("running identify " + counter);
+	
+
     identifyMessage();
 });
 
