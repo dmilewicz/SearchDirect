@@ -1,4 +1,6 @@
 .selection {
     background-color: yellow;
     color: black;
+    box-shadow:3px 0 0 yellow, -3px 0 0 yellow;
+    padding: 2px 0;
 }

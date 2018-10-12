@@ -34,11 +34,9 @@
 
 
 chrome.runtime.onMessage.addListener(
-
 	function(request, sender) {    
         
-		if (request.type && (request.type == RELAYED_SEARCH_STRING_MSG)) {
-
+		if (request.type && (request.type == RELAYED_SEARCH_STRING_MSG)) {å
 			console.log(request);
         }
 
@@ -53,9 +51,7 @@ chrome.runtime.onMessage.addListener(
             }
             
             console.log("result: ", result);
-            var badgeResult = "";
 
-        
             if (result.reverts.length > 0) {
                 chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count:SEARCH_SUCCESS}); //count: result.reverts.length });
                 console.log($(".selection")[0].getBoundingClientRect());
@@ -67,10 +63,8 @@ chrome.runtime.onMessage.addListener(
                 headResult = document.head.innerHTML.search(processString(request.searchString));
                 
                 if (headResult >= 0) {
-                    alert("in header");
                     chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: SEARCH_HEADER });
                 } else {
-                    alert("unfound");
                     chrome.runtime.sendMessage({ type: BADGE_UPDATE_MSG,  count: SEARCH_FAILURE });
                 }
             }
@@ -84,7 +78,7 @@ function processString(searchString) {
 
     return searchString.trim()
                        .replace(new RegExp(" ", "g"), whitespace) // unify whitespace
-                       .replace(/[()$^?]/g, '\\$&') // escape characters
+                       .replace(/[(){}$^?]/g, '\\$&') // escape characters
                        .replace(/[.]/g, '\\$&?') // make periods optional
                        .replace(/[']/g, '(’|\')'); // match right single quotation mark to apostrophe
 }
@@ -96,6 +90,16 @@ function runFind(searchString, domain=document.body) {
         wrapClass: 'selection'
     });
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -5,7 +5,6 @@
 
 var tab_badges = {};
 
-
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
 
@@ -50,6 +49,10 @@ function badgeUpdate(id, msg) {
 
 	if (msg == SEARCH_FAILURE) {
 		chrome.browserAction.setBadgeBackgroundColor({ color: RED, tabId:id});
+	}
+
+	if (msg == SEARCH_SUCCESS) {
+		chrome.browserAction.setBadgeBackgroundColor({ color: GREEN, tabId:id});
 	}
 
 	chrome.browserAction.setBadgeText({ text: msg , tabId : id});
