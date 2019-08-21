@@ -5,10 +5,6 @@
  *
  */
 
-
-
-
-
 var onMouseDownEvent = "class=\"addedLink\"";
 
 MutationObserver = window.MutationObserver || window.WebKitMutationObserver;

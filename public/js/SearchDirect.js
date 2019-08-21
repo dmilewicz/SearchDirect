@@ -17,16 +17,15 @@
 
 var RELAYED_SEARCH_STRING_MSG = "RELAY_STRING";
 var SEARCH_STRING_MSG = "REPORT_STRING";
-var BADGE_UPDATE_MSG = "BADGE_UPDATE";
+var SEARCH_RESULTS_MSG = "BADGE_UPDATE";
 var DEBUG = 1;
-
 
 var SEARCH_FAILURE = "X";
 var SEARCH_SUCCESS = "✔";
-var SEARCH_HEADER  = "#";
+var SEARCH_HEADER  = "H";
 
 var RED = "#FF0000";
-
+var GREEN = "#32CD32";
 
 //=================================================================================================
 // SYSTEM FUNCTIONS

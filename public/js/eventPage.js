@@ -4,49 +4,100 @@
  */
 
 var tab_badges = {};
+var pages = {}
+
+// setInterval(function() {
+// 	for (tab in pages) {
+// 		chrome.tabs.sendMessage(parseInt(tab), pages[tab]);
+// 	}
+// 	console.log(pages);
+// }, 500);
+
+
+function active_conn(msg, tabId) {
+	// alert("running!");
+	if (tabId in pages) {
+		console.log("once");
+		chrome.tabs.sendMessage(tabId, msg); 
+		setTimeout(function(){ active_conn(msg, tabId); }, 500);
+
+	} else {
+		console.log("err not found");
+
+		// no more calls
+	}
+}
 
 
 chrome.runtime.onMessage.addListener(
-	function(request, sender, sendResponse) {
+	function(message, sender, sendResponse) {
 
-		debug_log("Recieved " + request.type + " at event page");
-	
-		if (!request.type) {
+		debug_log("Recieved " + message.type + " at event page");
+
+		if (!message.type) {
 			debug_log("ERR: No type");
 			return;
 		}
 
-		switch (request.type) {
-
-			// report the string to be searched for
+		switch (message.type) {
+			// receive from google page tab the string to search for
 			case SEARCH_STRING_MSG: 
 				
+
 				chrome.tabs.onUpdated.addListener(function sendString(tabId, info, tab) {
-					if (tabId == sender.tab.id) {
-						console.log(request.searchString);
-						chrome.tabs.sendMessage(sender.tab.id, { type: RELAYED_SEARCH_STRING_MSG, searchString : request.searchString, page : request.page });
+					if (tabId == sender.tab.id) { // make sure correct tab
+
+						// log info
+						console.log(info);
+						console.log(message.searchString);
+
+						// construct message to be relayed
+						var relay_msg = { 
+							type: RELAYED_SEARCH_STRING_MSG, 
+							searchString : message.searchString, 
+							page : message.page,  
+						};
+
+						// send to the front tab, record sent message
+						chrome.tabs.sendMessage(sender.tab.id, relay_msg);
+						pages[sender.tab.id] = relay_msg;
+						active_conn(relay_msg, sender.tab.id);
+
+
+						// setTimeout(function() {
+						// 	if (pages[sender.tab.id]) {
+						// 		alert("hello!");
+						// 		chrome.tabs.sendMessage(sender.tab.id, relayed_msg); 
+						// 	}
+						// }, 2000);
+
+
+						// remove the listener when triggered
 						chrome.tabs.onUpdated.removeListener(sendString);
 					}
 				});
 				break;
 
 			// check ofr badge update condition
-			case BADGE_UPDATE_MSG: 
-				console.log("badge update request:", request.count);
-				badgeUpdate(sender.tab.id, request.count);
+			case SEARCH_RESULTS_MSG: 
+				delete pages[sender.tab.id];
+				console.log("deleted");
+				badgeUpdate(sender.tab.id, message.result);
 				break;
-
 		}
 	}
 );
 		
-chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
-	if (info.url) { // url has changed, clear the badge
-		badgeUpdate(tabId, "");
-	}
-});
+// chrome.tabs.onUpdated.addListener(function(tabId, info, tab) {
+// 	if (info.url) { // url has changed, clear the badge
+// 		badgeUpdate(tabId, "");
+// 	}
+// });
 
 function badgeUpdate(id, msg) {
+	if (msg == SEARCH_SUCCESS) {
+		chrome.browserAction.setBadgeBackgroundColor({ color: GREEN, tabId:id});
+	}
 
 	if (msg == SEARCH_FAILURE) {
 		chrome.browserAction.setBadgeBackgroundColor({ color: RED, tabId:id});

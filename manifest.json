@@ -1,13 +1,16 @@
 {
   "manifest_version": 2,
 
-  "name": "SearchDirect",
+  "name": "Hound",
   "description": "This extension allows for direct access to page content from google search",
   "version": "1.0",
 
   "browser_action": {
-    "default_icon": "icon.png",
+    "default_icon": "public/img/lailaps_clear_48_filled.png",
     "default_popup": "public/popup.html"
+  },
+  "icons": {
+    "48":"public/img/lailaps_clear_48_2.png"
   },
   "permissions": [
   	"tabs",
@@ -29,7 +32,7 @@
     {
       "run_at": "document_start",
       "matches": ["http://*/*", "https://*/*" ],
-      "js": ["public/lib/jquery-3.1.0.min.js", "public/js/SearchDirect.js", "public/js/contentPage.js", "public/js/findAndReplaceDOMText.js"],
+      "js": ["public/lib/jquery-3.1.0.min.js", "public/lib/jquery.scrollTo.min.js", "public/js/SearchDirect.js", "public/js/contentPage.js", "public/js/findAndReplaceDOMText.js"],
       "css": ["public/stylesheets/content.css"]
     }
   ]

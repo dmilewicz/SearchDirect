@@ -6,14 +6,23 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
         <link rel="stylesheet" href="stylesheets/normalize.css" />
         <link rel="stylesheet" type="text/css" href="stylesheets/custom.css" />
+        <link rel="stylesheet" type="text/css" href="stylesheets/content.css" />
+
+        <script type="text/javascript" src="js/contentPage.js"></script>
     </head>
 
-    <body>
-    HI HI I'M TESTING THINGS OUT
+    <body class="popup">
 
+        <button class="rerun" onclick="function(){directSearch(lastfind);}">Hound</button>
+
+        <div>
+            <span><span class="success">✔</span> - search successful</span><br>
+            <span><span class="fail"> X </span> - result not found</span><br>
+            <span><span class="head"> H </span> - fesult found in page <a href="https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML/The_head_metadata_in_HTML" target="_blank">header</a></span>
+        </div>
     </body>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="jsjquery.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 </html>
