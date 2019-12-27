@@ -8,11 +8,16 @@ var lastfind;
 
 
 chrome.runtime.onMessage.addListener(
-	function(request, sender) {    
+    function(request, sender) {    
         
-		if (request.type && (request.type == RELAYED_SEARCH_STRING_MSG)) {
-			console.log(request);
+        if (request.type && (request.type == RELAYED_SEARCH_STRING_MSG)) {
+            console.log(request);
         }
+
+        // if (!request.page || !(request.page == document.URL)) {
+        //     console.log("Error - running on wrong page: " + request.page);
+        //     return;
+        // }
 
         if (document.readyState == "loaded" || document.readyState == "interactive" || document.readyState == "complete") {
             directSearch(request);
@@ -76,7 +81,10 @@ function directSearch(request) {
         
         // check if found string in header
         if (headResult >= 0) {
-            chrome.runtime.sendMessage({ type: SEARCH_RESULTS_MSG,  result: SEARCH_HEADER });
+            if (ENABLE_HEADER)
+                chrome.runtime.sendMessage({ type: SEARCH_RESULTS_MSG, result: SEARCH_HEADER });
+            else 
+                chrome.runtime.sendMessage({ type: SEARCH_RESULTS_MSG, result: SEARCH_FAILURE });
         } else {
             chrome.runtime.sendMessage({ type: SEARCH_RESULTS_MSG,  result: SEARCH_FAILURE });
         }

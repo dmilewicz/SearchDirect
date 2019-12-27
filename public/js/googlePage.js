@@ -19,7 +19,6 @@ var observer = new MutationObserver(function(mutations, observer) {
     console.log(mutations);
     console.log("running identify " + counter);
     
-
     identifyMessage();
 });
 
@@ -48,7 +47,6 @@ function identifyMessage() {
  * Injects a hyperlink into the HTML of the given google HTML element. Currently this element
  * should be a 'g' class element.
  * @param message
- *
  */
 function injectHyperlink(message) {
     
